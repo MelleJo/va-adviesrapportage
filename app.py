@@ -2,6 +2,7 @@ import streamlit as st
 from services.openai_service import transcribe_audio
 from services.summarization_service import summarize_text
 from components.ui_components import audio_input
+import tempfile  # Voeg deze import toe
 
 # Logging
 import logging
