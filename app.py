@@ -3,7 +3,6 @@ from pydub import AudioSegment
 import tempfile
 from streamlit_mic_recorder import mic_recorder
 
-from utils.text_processing import update_gesprekslog
 from openai import OpenAI
 import logging
 import io
