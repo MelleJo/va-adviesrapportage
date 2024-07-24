@@ -7,7 +7,6 @@ from config import OPENAI_API_KEY
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_openai_tools_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_community.chat_message_histories import ChatMessageHistory
 
 openai.api_key = OPENAI_API_KEY
 logger = logging.getLogger(__name__)
@@ -56,7 +55,7 @@ def fill_fields(transcribed_text):
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", "You are a helpful assistant."),
-            ("human", transcribed_text),
+            ("human", "{input}"),
             MessagesPlaceholder("agent_scratchpad"),
         ]
     )
@@ -76,5 +75,5 @@ def fill_fields(transcribed_text):
         prompt
     )
 
-    response = agent.invoke({"input": transcribed_text})
+    response = agent.invoke({"input": transcribed_text, "chat_history": [], "intermediate_steps": []})
     return response['choices'][0]['text'].strip()
