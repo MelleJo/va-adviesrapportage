@@ -100,4 +100,3 @@ def process_audio_input(input_method):
                 st.session_state['transcription_done'] = True
                 logger.debug("Transcription marked as done")
                 st.experimental_rerun()
-..
