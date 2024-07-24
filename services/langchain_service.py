@@ -18,9 +18,10 @@ def transcribe_audio(file_path):
         audio_segments = split_audio(file_path)
         logger.debug(f"Audio split into {len(audio_segments)} segments")
     except Exception as e:
-        logger.error(f"Error splitting audio: {str(e)}")
-        st.error(f"Fout bij het segmenteren van het audio: {str(e)}")
-        return "Segmentatie mislukt."
+        error_message = f"Error splitting audio: {str(e)}"
+        logger.error(error_message)
+        st.error(error_message)
+        return f"Transcriptie mislukt: {error_message}"
 
     total_segments = len(audio_segments)
     progress_bar = st.progress(0)
@@ -42,9 +43,10 @@ def transcribe_audio(file_path):
                     logger.debug(f"Transcription response received for segment {i+1}")
                     transcript_text += transcription_response + " "
                 except Exception as e:
-                    logger.error(f"Error transcribing segment {i+1}: {str(e)}")
-                    st.error(f"Fout bij het transcriberen: {str(e)}")
-                    continue
+                    error_message = f"Error transcribing segment {i+1}: {str(e)}"
+                    logger.error(error_message)
+                    st.error(error_message)
+                    return f"Transcriptie mislukt: {error_message}"
         progress_bar.progress((i + 1) / total_segments)
     progress_text.success("Transcriptie voltooid.")
     logger.debug(f"Transcription completed. Total length: {len(transcript_text)}")
