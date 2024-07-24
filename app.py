@@ -3,10 +3,8 @@ from services.langchain_service import transcribe_audio, fill_fields
 from streamlit_mic_recorder import mic_recorder
 import tempfile  # Zorg ervoor dat tempfile is geïmporteerd
 
-# Logging
 import logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 st.title("Financieel Advies Spraak naar Tekst")
 st.write("Kies een methode om audio te verwerken:")
