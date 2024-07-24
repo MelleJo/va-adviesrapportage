@@ -1,7 +1,7 @@
 import streamlit as st
 from services.langchain_service import transcribe_audio, fill_fields
 from streamlit_mic_recorder import mic_recorder
-import tempfile  # Zorg ervoor dat tempfile is geïmporteerd
+import tempfile
 
 # Logging
 import logging
