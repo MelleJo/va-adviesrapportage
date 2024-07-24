@@ -4,7 +4,7 @@ from utils.audio_processing import split_audio
 import logging
 import streamlit as st
 from config import OPENAI_API_KEY
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 from langchain.chains import LLMChain
 
