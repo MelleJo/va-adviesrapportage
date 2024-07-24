@@ -55,7 +55,7 @@ def fill_fields(transcribed_text):
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", "You are a helpful assistant."),
-            ("human", transcribed_text),
+            ("human", "{input}"),
             MessagesPlaceholder("agent_scratchpad"),
         ]
     )
