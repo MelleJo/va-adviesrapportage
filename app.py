@@ -2,7 +2,7 @@ import streamlit as st
 from pydub import AudioSegment
 import tempfile
 from streamlit_mic_recorder import mic_recorder
-from services.summarization_service import summarize_text
+
 from utils.text_processing import update_gesprekslog
 from openai import OpenAI
 import logging
@@ -100,7 +100,4 @@ def process_audio_input(input_method):
                 st.session_state['transcription_done'] = True
                 logger.debug("Transcription marked as done")
                 st.experimental_rerun()
-        
-        # Rest of the function remains the same...
-
-    # Rest of the function remains the same...
+..
