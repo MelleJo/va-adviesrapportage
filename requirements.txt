@@ -1,0 +1,12 @@
+streamlit
+pydub
+streamlit-mic-recorder
+openai
+langchain
+ffmpeg-python
+ffmpy
+langchain_community
+langchain_openai
+langchain
+langchain_core
+sentence_transformers
