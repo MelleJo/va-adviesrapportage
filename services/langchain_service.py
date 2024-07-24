@@ -5,7 +5,7 @@ import logging
 import streamlit as st
 from config import OPENAI_API_KEY
 from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 from langchain.chains import LLMChain
 
 openai.api_key = OPENAI_API_KEY
@@ -52,16 +52,13 @@ def transcribe_audio(file_path):
     return transcript_text.strip()
 
 def fill_fields(transcribed_text):
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", "You are a helpful assistant."),
-            ("human", "{input}"),
-            MessagesPlaceholder("agent_scratchpad"),
-        ]
-    )
+    prompt = ChatPromptTemplate.from_messages([
+        SystemMessagePromptTemplate.from_template("You are a helpful assistant."),
+        HumanMessagePromptTemplate.from_template("{input}")
+    ])
 
     llm = ChatOpenAI(
-        model="gpt-4o",
+        model="gpt-4",
         temperature=0.1,
         max_tokens=500,
         openai_api_key=OPENAI_API_KEY
@@ -73,9 +70,8 @@ def fill_fields(transcribed_text):
     )
 
     inputs = {
-        "input": transcribed_text,
-        "agent_scratchpad": ""
+        "input": transcribed_text
     }
 
     response = chain(inputs)
-    return response['output']
+    return response['text']
