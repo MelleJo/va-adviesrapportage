@@ -55,7 +55,7 @@ def fill_fields(transcribed_text):
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", "You are a helpful assistant."),
-            ("human", "{input}"),
+            ("user", "{input}"),
             MessagesPlaceholder("agent_scratchpad"),
         ]
     )
@@ -72,5 +72,10 @@ def fill_fields(transcribed_text):
         prompt=prompt,
     )
 
-    response = chain.invoke({"input": transcribed_text})
+    inputs = {
+        "input": transcribed_text,
+        "agent_scratchpad": ""
+    }
+
+    response = chain.invoke(inputs)
     return response['text'].strip()
