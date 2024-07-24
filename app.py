@@ -99,3 +99,49 @@ def process_audio_input(input_method):
                 st.session_state['transcription_done'] = True
                 logger.debug("Transcription marked as done")
                 st.experimental_rerun()
+        
+        if st.session_state.get('transcription_done', False) and not st.session_state.get('summarization_done', False):
+            logger.debug("Starting summarization process")
+            with st.spinner("Genereren van samenvatting..."):
+                transcript = st.session_state.get('transcript', '')
+                logger.debug(f"Retrieved transcript from session state. Length: {len(transcript)}")
+                department = st.session_state.get('department', '')
+                logger.debug(f"Department: {department}")
+                st.info(f"Omzetten van audio naar transcript. Lengte: {len(transcript)}")
+                if transcript:
+                    summary = summarize_text(transcript, department)
+                    logger.debug(f"Samenvatting gegenereerd. Lengte: {len(summary)}")
+                    st.session_state['summary'] = summary
+                    logger.debug(f"Summary saved to session state. Length: {len(st.session_state['summary'])}")
+                    update_gesprekslog(transcript, summary)
+                    logger.debug("Gesprekslog updated")
+                    st.info(f"Samenvatting gegenereerd. Lengte: {len(summary)}")
+                else:
+                    logger.error("No transcript found to summarize")
+                    st.error("Geen transcript gevonden.")
+            st.session_state['summarization_done'] = True
+            logger.debug("Summarization marked as done")
+            st.session_state['processing_complete'] = True
+            logger.debug("Processing marked as complete")
+            st.experimental_rerun()
+
+    logger.debug("Exiting process_audio_input")
+    logger.debug(f"Final session state: {st.session_state}")
+
+    # Display current state for debugging
+    st.write("Current session state:")
+    st.write(f"Transcript length: {len(st.session_state.get('transcript', ''))}")
+    st.write(f"Summary length: {len(st.session_state.get('summary', ''))}")
+    st.write(f"Transcription done: {st.session_state.get('transcription_done', False)}")
+    st.write(f"Summarization done: {st.session_state.get('summarization_done', False)}")
+    st.write(f"Processing complete: {st.session_state.get('processing_complete', False)}")
+
+# Main app logic (if needed)
+def main():
+    st.title("Financieel Advies Spraak naar Tekst")
+    st.write("Kies een methode om audio te verwerken:")
+    input_method = st.radio("", ["Upload audio", "Neem audio op"])
+    process_audio_input(input_method)
+
+if __name__ == "__main__":
+    main()
