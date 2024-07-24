@@ -1,8 +1,7 @@
 import streamlit as st
-from services.openai_service import transcribe_audio
-from services.summarization_service import summarize_text
-from components.ui_components import audio_input
-import tempfile  # Voeg deze import toe
+from services.langchain_service import transcribe_audio, fill_fields
+from streamlit_mic_recorder import mic_recorder
+import tempfile  # Zorg ervoor dat tempfile is geïmporteerd
 
 # Logging
 import logging
@@ -13,7 +12,12 @@ st.title("Financieel Advies Spraak naar Tekst")
 st.write("Kies een methode om audio te verwerken:")
 input_method = st.radio("", ["Upload audio", "Neem audio op"])
 
-audio_data = audio_input(input_method)
+audio_data = None
+
+if input_method == "Upload audio":
+    audio_data = st.file_uploader("Upload een audiobestand", type=['wav', 'mp3', 'mp4', 'm4a', 'ogg', 'webm'])
+elif input_method == "Neem audio op":
+    audio_data = mic_recorder(key="recorder", start_prompt="Start opname", stop_prompt="Stop opname", use_container_width=True, format="webm")
 
 if audio_data and not st.session_state.get('transcription_done', False):
     if input_method == "Upload audio":
@@ -36,13 +40,6 @@ if st.session_state.get('transcript'):
     st.write("Ingesproken tekst:")
     st.write(transcript)
     
-    department = st.selectbox("Selecteer de afdeling:", ["Financieel Advies", "Particulieren", "Schadeafdeling", "Bedrijven"])
-    if st.button("Genereer samenvatting"):
-        summary = summarize_text(transcript, department)
-        st.session_state['summary'] = summary
-        st.session_state['summarization_done'] = True
-        st.experimental_rerun()
-
-if st.session_state.get('summary'):
-    st.write("Samenvatting:")
-    st.write(st.session_state['summary'])
+    st.write("Ingevulde velden:")
+    filled_fields = fill_fields(transcript)
+    st.write(filled_fields)

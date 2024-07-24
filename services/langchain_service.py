@@ -4,6 +4,10 @@ from utils.audio_processing import split_audio
 import logging
 import streamlit as st
 from config import OPENAI_API_KEY
+from langchain_openai import ChatOpenAI
+from langchain.agents import create_openai_tools_agent
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_community.chat_message_histories import ChatMessageHistory
 
 openai.api_key = OPENAI_API_KEY
 logger = logging.getLogger(__name__)
@@ -47,3 +51,30 @@ def transcribe_audio(file_path):
     logger.debug(f"Transcription completed. Total length: {len(transcript_text)}")
     st.info(f"Transcript gegenereerd. Lengte: {len(transcript_text)}")
     return transcript_text.strip()
+
+def fill_fields(transcribed_text):
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "You are a helpful assistant."),
+            ("human", transcribed_text),
+            MessagesPlaceholder("agent_scratchpad"),
+        ]
+    )
+
+    llm = ChatOpenAI(
+        model="gpt-4o",
+        temperature=0.1,
+        max_tokens=500,
+        openai_api_key=OPENAI_API_KEY
+    )
+
+    tools = []  # Define your tools here if necessary
+
+    agent = create_openai_tools_agent(
+        llm,
+        tools,
+        prompt
+    )
+
+    response = agent.invoke({"input": transcribed_text})
+    return response['choices'][0]['text'].strip()

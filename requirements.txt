@@ -10,3 +10,4 @@ langchain_openai
 langchain
 langchain_core
 sentence_transformers
+httpx
