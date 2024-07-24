@@ -7,7 +7,6 @@ from config import OPENAI_API_KEY
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains import LLMChain
-from langchain.schema import BaseMessage, HumanMessage, SystemMessage
 
 openai.api_key = OPENAI_API_KEY
 logger = logging.getLogger(__name__)
@@ -55,9 +54,9 @@ def transcribe_audio(file_path):
 def fill_fields(transcribed_text):
     prompt = ChatPromptTemplate.from_messages(
         [
-            SystemMessage(content="You are a helpful assistant."),
-            HumanMessage(content="{input}"),
-            MessagesPlaceholder(variable_name="agent_scratchpad"),
+            ("system", "You are a helpful assistant."),
+            ("human", "{input}"),
+            MessagesPlaceholder("agent_scratchpad"),
         ]
     )
 
