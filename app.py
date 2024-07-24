@@ -109,7 +109,7 @@ def process_audio_input(input_method):
                 logger.debug(f"Department: {department}")
                 st.info(f"Omzetten van audio naar transcript. Lengte: {len(transcript)}")
                 if transcript:
-                    summary = summarize_text(transcript, department)
+                    st.wite(f"transcript")
                     logger.debug(f"Samenvatting gegenereerd. Lengte: {len(summary)}")
                     st.session_state['summary'] = summary
                     logger.debug(f"Summary saved to session state. Length: {len(st.session_state['summary'])}")
