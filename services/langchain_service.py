@@ -78,5 +78,5 @@ def fill_fields(transcribed_text):
         "agent_scratchpad": ""
     }
 
-    response = chain.invoke(inputs)
-    return response['text'].strip()
+    response = chain(inputs)
+    return response['output']
